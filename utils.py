@@ -12,6 +12,7 @@ def ler_int(msg, minimo = None):
         except ValueError:
             print("Valor não se encaixa em int")
     
+    
 def ler_float(msg, minimo = None):
     while True:
         numero = input(msg)
@@ -25,6 +26,7 @@ def ler_float(msg, minimo = None):
         except ValueError:
             print("Valor não se encaixa em float")
         
+        
 def ler_texto(msg):
     while True:
         texto = input(msg).strip()
@@ -32,6 +34,7 @@ def ler_texto(msg):
             print("Digite algo")
         else:
             return texto
+
 
 def ler_opcao(msg, opcoes_validas):
     while True:
@@ -41,6 +44,7 @@ def ler_opcao(msg, opcoes_validas):
         else:
             print("Opção inválida")
 
+
 def validar_codigo(codigo):
     partes = codigo.split("-")
     if len(partes) != 2:
@@ -49,22 +53,28 @@ def validar_codigo(codigo):
         return False
     return partes[1].isdigit()
 
+
 def tipo_do_codigo(codigo):
     return codigo.split("-")[0]
 
+
 def linha():
     print("-" * 50)
+
 
 def cabecalho(titulo):
     print("=" * 50)
     print(titulo.center(50))
     print("=" * 50)
 
+
 def data_hoje():
     return date.today().isoformat()          
 
+
 def formatar_data(data):
     return datetime.strptime(data, "%Y-%m-%d").strftime("%d/%m/%Y")
+
 
 def formatar_moeda(valor):
     texto = f"{valor:,.2f}"                  

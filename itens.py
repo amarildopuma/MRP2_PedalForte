@@ -1,4 +1,5 @@
-from utils import ler_texto, validar_codigo, tipo_do_codigo, ler_int, ler_float, ler_texto, tipo_do_codigo, formatar_moeda, ler_opcao
+from utils import ler_texto, validar_codigo, tipo_do_codigo, ler_int, ler_float, formatar_moeda, ler_opcao
+from persistencia import carregar_json, salvar_json
 
 def cadastrar_item(itens):
     while True:
@@ -11,6 +12,7 @@ def cadastrar_item(itens):
             continue
         break
 
+
     itens[codigo] = {
         "descricao" : ler_texto("Descrição: "),
         "tipo": tipo_do_codigo(codigo),
@@ -20,6 +22,7 @@ def cadastrar_item(itens):
         "estoque_seguranca": ler_int("Estoque de segurança: ", 0),
         "lote_minimo": ler_int("Lote mínimo: ", 1),
     }
+
 
 def listar_itens(itens):
     if not itens:
@@ -33,6 +36,7 @@ def listar_itens(itens):
             f"{dados['lead_time']}  {dados['estoque_seguranca']}  "
             f"{dados['lote_minimo']}"
         )
+
 
 def alterar_item(itens):
     while True:
@@ -66,13 +70,21 @@ def alterar_item(itens):
 
     print(f"Item {codigo} alterado.")
 
+
 def item_existe(itens, codigo):
     if codigo in itens:
         return True
     else:
         return False
 
+
 def buscar_item(itens, codigo):
     if item_existe(itens, codigo):
         return itens[codigo]
     return None
+
+if __name__ == "__main__":
+    itens = carregar_json("itens.json")
+    cadastrar_item(itens)
+    salvar_json("itens.json", itens)
+    listar_itens(itens)
