@@ -1,6 +1,8 @@
 from utils import ler_texto, validar_codigo, tipo_do_codigo, ler_int, ler_float, formatar_moeda, ler_opcao
 from persistencia import carregar_json, salvar_json
 
+UNIDADES = ["UN", "KG", "M", "L", "PC"]
+ 
 def cadastrar_item(itens):
     while True:
         codigo = ler_texto("Código do item: ").upper()
@@ -8,20 +10,20 @@ def cadastrar_item(itens):
             print("Código inválido, tente de novo!")
             continue
         if codigo in itens:
-            print("item ja existe")
+            print("Item já existe")
             continue
         break
-
-
+ 
     itens[codigo] = {
-        "descricao" : ler_texto("Descrição: "),
+        "descricao": ler_texto("Descrição: "),
         "tipo": tipo_do_codigo(codigo),
-        "unidade": ler_texto("Unidade: "),
+        "unidade": ler_opcao(f"Unidade {UNIDADES}: ", UNIDADES).lower(),
         "custo": ler_float("Custo: ", 0.01),
         "lead_time": ler_int("Lead time (semanas): ", 0),
         "estoque_seguranca": ler_int("Estoque de segurança: ", 0),
         "lote_minimo": ler_int("Lote mínimo: ", 1),
     }
+    print(f"Item {codigo} cadastrado.")
 
 
 def listar_itens(itens):
