@@ -1,12 +1,8 @@
 from mps import obter_demanda
 from ordens import apagar_ordens_planejadas, criar_ordem, listar_excecoes
 
-SEMANAS = 8
 
-# registros = {codigo: registro}, onde cada registro e um dicionario:
-#   saldo_inicial, nb, rp, ep, nl, rpl, lp (listas de 8 semanas),
-#   lp_total (lp + atrasadas jogadas na semana 1, usado pelos filhos) e
-#   planejadas (lista de (sem_liberacao, sem_entrega, quantidade)).
+SEMANAS = 8
 
 
 def ordenar_itens_por_tipo(itens):
@@ -45,21 +41,25 @@ def calcular_necessidade_bruta(itens, estrutura, mps, registros, codigo):
     return nb
 
 
-def calcular_registro_item(item, saldo_inicial, nb, rp):
+def calcular_registro_item(
+        item,
+        saldo_inicial,  # estoque atual do item (saldo em estoque.json)
+        nb,  # necessidade bruta: quanto preciso em cada semana
+        rp):  # recebimentos programados: ordens FIRME/LIBERADA a chegar
     """Aplica RN05, RN06 e RN07 semana a semana."""
-    seguranca = item["estoque_seguranca"]
-    lote_minimo = item["lote_minimo"]
-    lead_time = item["lead_time"]
+    seguranca = item["estoque_seguranca"]  # ES: estoque de seguranca
+    lote_minimo = item["lote_minimo"]  # menor quantidade por ordem (RN06)
+    lead_time = item["lead_time"]  # semanas entre liberar e receber (RN07)
 
-    nl = [0] * SEMANAS
-    rpl = [0] * SEMANAS
-    ep = [0] * SEMANAS
-    lp = [0] * SEMANAS
-    lp_total = [0] * SEMANAS
-    planejadas = []
+    nl = [0] * SEMANAS  # necessidade liquida: o que falta de fato (RN05)
+    rpl = [0] * SEMANAS  # recebimentos planejados: quanto pedir (RN06)
+    ep = [0] * SEMANAS  # estoque projetado: sobra no fim da semana
+    lp = [0] * SEMANAS  # liberacao planejada: semana de iniciar (RN07)
+    lp_total = [0] * SEMANAS  # lp + atrasadas (alimenta nb dos filhos)
+    planejadas = []  # ordens a criar: (sem_liberacao, sem_entrega, qtd)
 
-    ep_anterior = saldo_inicial
-    for i in range(SEMANAS):
+    ep_anterior = saldo_inicial  # estoque projetado da semana anterior
+    for i in range(SEMANAS):  # i = posicao na lista (semana - 1)
         # RN05
         nl[i] = max(0, nb[i] + seguranca - (ep_anterior + rp[i]))
 
@@ -72,8 +72,8 @@ def calcular_registro_item(item, saldo_inicial, nb, rp):
 
         # RN07: liberacao = semana do recebimento - lead time
         if rpl[i] > 0:
-            sem_entrega = i + 1
-            sem_liberacao = sem_entrega - lead_time
+            sem_entrega = i + 1  # semana de chegada (posicao + 1)
+            sem_liberacao = sem_entrega - lead_time  # semana de iniciar
             planejadas.append((sem_liberacao, sem_entrega, rpl[i]))
             if sem_liberacao >= 1:
                 lp[sem_liberacao - 1] += rpl[i]
@@ -86,6 +86,7 @@ def calcular_registro_item(item, saldo_inicial, nb, rp):
         "nb": nb, "rp": rp, "ep": ep, "nl": nl, "rpl": rpl,
         "lp": lp, "lp_total": lp_total, "planejadas": planejadas,
     }
+
 
 
 def gerar_ordens_do_registro(ordens, itens, codigo, registro):
@@ -130,7 +131,8 @@ def exibir_registro_mrp(itens, registros, codigo):
           f"Lote min.: {item['lote_minimo']} | "
           f"Estoque: {reg['saldo_inicial']:g}")
 
-    print(f"{'Semana':<22}" + "".join(f"{s:>6}" for s in range(1, SEMANAS + 1)))
+    semanas = "".join(f"{s:>6}" for s in range(1, SEMANAS + 1))
+    print(f"{'Semana':<22}{semanas}")
     _linha("Necessidade bruta", reg["nb"])
     _linha("Receb. programados", reg["rp"])
     _linha("Estoque projetado", reg["ep"])

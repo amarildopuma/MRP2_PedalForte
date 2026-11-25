@@ -50,28 +50,29 @@ def salvar_movimentos(movimentos):
 
 
 def carregar_tudo():
+    """Carrega todos os dados do sistema (chamado ao iniciar)."""
     itens = carregar_json("itens.json")
     estrutura = carregar_json("estrutura.json")
     estoque = carregar_json("estoque.json")
     mps = carregar_json("mps.json")
     ordens = carregar_json("ordens.json")
-    if not ordens:
+    if not ordens:  # arquivo ausente devolve {}, mas ordens e uma lista
         ordens = []
     movimentos = carregar_movimentos()
-    return itens, estrutura, estoque, mps, ordens, movimentos
+    centros = carregar_json("centros.json")
+    roteiros = carregar_json("roteiros.json")
+    return (itens, estrutura, estoque, mps, ordens, movimentos,
+            centros, roteiros)
 
 
-def salvar_tudo(itens, estrutura, estoque, mps, ordens, movimentos):
+def salvar_tudo(itens, estrutura, estoque, mps, ordens, movimentos,
+                centros, roteiros):
+    """Grava todos os dados do sistema (chamado a cada alteracao)."""
     salvar_json("itens.json", itens)
     salvar_json("estrutura.json", estrutura)
     salvar_json("estoque.json", estoque)
     salvar_json("mps.json", mps)
     salvar_json("ordens.json", ordens)
     salvar_movimentos(movimentos)
-
-
-if __name__ == "__main__":
-    movs = [{"data": "2026-11-22", "codigo": "MP-202", "tipo": "ENTRADA",
-             "quantidade": 60, "saldo": 60, "documento": "NF 1"}]
-    salvar_movimentos(movs)
-    print(carregar_movimentos())
+    salvar_json("centros.json", centros)
+    salvar_json("roteiros.json", roteiros)

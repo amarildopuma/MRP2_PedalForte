@@ -3,8 +3,10 @@ from utils import (
     ler_texto, ler_float, ler_opcao, data_hoje, formatar_data, cabecalho
 )
 
+
 def obter_saldo(estoque, codigo):
     return estoque.get(codigo, 0.0)
+
 
 def registrar_movimentacao(estoque, movimentos, codigo, tipo,
                            quantidade, documento):
@@ -15,7 +17,7 @@ def registrar_movimentacao(estoque, movimentos, codigo, tipo,
     elif tipo == "SAIDA":
         variacao = -quantidade
     elif tipo == "AJUSTE":
-        variacao = quantidade 
+        variacao = quantidade
     else:
         print("Tipo de movimentacao invalido.")
         return False
@@ -37,6 +39,7 @@ def registrar_movimentacao(estoque, movimentos, codigo, tipo,
         "documento": documento,
     })
     return True
+
 
 def verificar_alerta(itens, estoque, codigo):
     saldo = obter_saldo(estoque, codigo)

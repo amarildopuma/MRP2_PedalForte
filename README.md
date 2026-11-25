@@ -1,2 +1,0 @@
-# Bicicleta
-Trabalho de Python

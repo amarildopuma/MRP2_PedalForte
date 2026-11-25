@@ -1,22 +1,23 @@
 from datetime import date, datetime
 
-def ler_int(msg, minimo = None):
+
+def ler_int(msg, minimo=None):
     while True:
-        quantidade=input(msg)
+        quantidade = input(msg)
         try:
-            quantidade=int(quantidade)
+            quantidade = int(quantidade)
             if minimo is None or quantidade >= minimo:
                 return quantidade
             else:
                 print("Valor menor que o minimo")
         except ValueError:
             print("Valor não se encaixa em int")
-    
-    
-def ler_float(msg, minimo = None):
+
+
+def ler_float(msg, minimo=None):
     while True:
         numero = input(msg)
-        numero = numero.replace(',','.')
+        numero = numero.replace(',', '.')
         try:
             numero = float(numero)
             if minimo is None or numero >= minimo:
@@ -25,12 +26,12 @@ def ler_float(msg, minimo = None):
                 print("numero menor q o minimo")
         except ValueError:
             print("Valor não se encaixa em float")
-        
-        
+
+
 def ler_texto(msg):
     while True:
         texto = input(msg).strip()
-        if len(texto)== 0:
+        if len(texto) == 0:
             print("Digite algo")
         else:
             return texto
@@ -69,7 +70,7 @@ def cabecalho(titulo):
 
 
 def data_hoje():
-    return date.today().isoformat()          
+    return date.today().isoformat()
 
 
 def formatar_data(data):
@@ -77,6 +78,6 @@ def formatar_data(data):
 
 
 def formatar_moeda(valor):
-    texto = f"{valor:,.2f}"                  
+    texto = f"{valor:,.2f}"
     texto = texto.replace(",", "X").replace(".", ",").replace("X", ".")
-    return f"R$ {texto}"                     
+    return f"R$ {texto}"

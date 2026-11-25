@@ -1,0 +1,15 @@
+codigo,descricao,tipo,unidade,saldo,estoque_seguranca,situacao
+PA-001,Bicicleta Aro 29 MTB,PA,un,0.0,0,OK
+PA-002,Bicicleta Aro 29 Urbana,PA,un,0.0,0,OK
+SA-010,Quadro aro 29 soldado,SA,un,10,5,OK
+SA-020,Roda aro 29 montada,SA,un,40,10,OK
+MP-100,Tubo de aco carbono,MP,m,160,30,OK
+MP-101,Tinta epoxi,MP,l,8,5,OK
+MP-200,Aro 29 aluminio,MP,un,30,20,OK
+MP-201,Raio inox,MP,un,300,200,OK
+MP-202,Pneu 29 x 2.20,MP,un,18,20,ABAIXO
+MP-300,Guidao,MP,un,15,10,OK
+MP-301,Kit transmissao 12v,MP,un,8,10,ABAIXO
+MP-302,Selim,MP,un,20,10,OK
+MP-303,Paralama (par),MP,un,6,10,ABAIXO
+PA-103,teste,PA,kg,0.0,54,ABAIXO

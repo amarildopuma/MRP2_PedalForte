@@ -1,11 +1,17 @@
-from utils import ler_texto, validar_codigo, tipo_do_codigo, ler_int, ler_float, formatar_moeda, ler_opcao
-from persistencia import carregar_json, salvar_json
+from utils import (
+    ler_texto, validar_codigo, tipo_do_codigo, ler_int, ler_float,
+    formatar_moeda, ler_opcao
+)
+
 
 UNIDADES = ["UN", "KG", "M", "L", "PC"]
- 
+
+
 def cadastrar_item(itens):
     while True:
-        codigo = ler_texto("Código do item: ").upper()
+        codigo = ler_texto("Código do item (0 para voltar): ").upper()
+        if codigo == "0":
+            return
         if not validar_codigo(codigo):
             print("Código inválido, tente de novo!")
             continue
@@ -13,7 +19,7 @@ def cadastrar_item(itens):
             print("Item já existe")
             continue
         break
- 
+
     itens[codigo] = {
         "descricao": ler_texto("Descrição: "),
         "tipo": tipo_do_codigo(codigo),
@@ -30,7 +36,6 @@ def listar_itens(itens):
     if not itens:
         print("Nenhum item cadastrado.")
         return
-
     for codigo, dados in itens.items():
         print(
             f"{codigo}  {dados['descricao']}  ({dados['tipo']})  "
@@ -41,13 +46,17 @@ def listar_itens(itens):
 
 
 def alterar_item(itens):
+    if not itens:
+        print("Nenhum item cadastrado.")
+        return
     while True:
-        codigo = ler_texto("Código do item: ").upper()
+        codigo = ler_texto("Código do item (0 para voltar): ").upper()
+        if codigo == "0":
+            return
         if codigo not in itens:
             print("Item não encontrado.")
             continue
         break
-
     print("1. Descrição")
     print("2. Unidade")
     print("3. Custo")
@@ -60,7 +69,8 @@ def alterar_item(itens):
     if campo == "1":
         itens[codigo]["descricao"] = ler_texto("Nova descrição: ")
     elif campo == "2":
-        itens[codigo]["unidade"] = ler_texto("Nova unidade: ")
+        itens[codigo]["unidade"] = ler_opcao(
+            f"Nova unidade {UNIDADES}: ", UNIDADES).lower()
     elif campo == "3":
         itens[codigo]["custo"] = ler_float("Novo custo: ", 0.01)
     elif campo == "4":
@@ -84,9 +94,3 @@ def buscar_item(itens, codigo):
     if item_existe(itens, codigo):
         return itens[codigo]
     return None
-
-if __name__ == "__main__":
-    itens = carregar_json("itens.json")
-    cadastrar_item(itens)
-    salvar_json("itens.json", itens)
-    listar_itens(itens)

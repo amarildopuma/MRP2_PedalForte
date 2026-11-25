@@ -1,7 +1,9 @@
 from utils import ler_texto, ler_int, cabecalho
 from itens import item_existe
 
+
 SEMANAS = 8
+
 
 # Estrutura do MPS (RF07):
 #   mps = {"PA-001": [0, 0, 10, 30, 0, 20, 0, 0]}
@@ -64,14 +66,6 @@ def alterar_mps(itens, mps):
     mps[codigo][semana - 1] = ler_int("Nova demanda: ", 0)
     print(f"Semana {semana} de {codigo} alterada.")
 
-    semana = ler_int(f"Semana a alterar [1-{SEMANAS}]: ", 1)
-    while semana > SEMANAS:
-        print(f"A semana deve ser de 1 a {SEMANAS}.")
-        semana = ler_int(f"Semana a alterar [1-{SEMANAS}]: ", 1)
-
-    mps[codigo][semana - 1] = ler_int("Nova demanda: ", 0)
-    print(f"Semana {semana} de {codigo} alterada.")
-
 
 def exibir_mps(itens, mps):
     cabecalho("PLANO MESTRE DE PRODUCAO (MPS)")
@@ -85,24 +79,3 @@ def exibir_mps(itens, mps):
         valores = "".join(f"{d:>5}" for d in demanda)
         descricao = itens[codigo]["descricao"] if codigo in itens else "?"
         print(f"{codigo:<8}{descricao:<26}{valores}")
-
-
-if __name__ == "__main__":
-    itens = {
-        "PA-001": {"descricao": "Bicicleta Aro 29 MTB", "tipo": "PA",
-                   "unidade": "un", "custo": 0.0, "lead_time": 1,
-                   "estoque_seguranca": 0, "lote_minimo": 1},
-        "MP-300": {"descricao": "Guidao", "tipo": "MP", "unidade": "un",
-                   "custo": 45.0, "lead_time": 2,
-                   "estoque_seguranca": 10, "lote_minimo": 30},
-    }
-    mps = {"PA-001": [0, 10, 30, 0, 20, 0, 0, 0]}
-
-    exibir_mps(itens, mps)
-    print(obter_demanda(mps, "PA-001"))   # [0, 10, 30, 0, 20, 0, 0, 0]
-    print(obter_demanda(mps, "PA-002"))   # [0, 0, 0, 0, 0, 0, 0, 0]
-
-    # Testes interativos (descomente para rodar):
-    # cadastrar_mps(itens, mps)    # tente MP-300 (tem que recusar)
-    # alterar_mps(itens, mps)
-    # exibir_mps(itens, mps)

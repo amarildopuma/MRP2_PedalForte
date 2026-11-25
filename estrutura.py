@@ -35,6 +35,7 @@ def cadastrar_componente(estrutura, itens):
 def listar_componentes(estrutura, pai):
     return estrutura.get(pai, {})
 
+
 def explodir_bom(estrutura, codigo, nivel=0):
     resultado = []
     for filho, qtd in listar_componentes(estrutura, codigo).items():
